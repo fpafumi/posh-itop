@@ -4,7 +4,7 @@ A PowerShell wrapper for Combodo's iTop CMDB
 
 ## Requirements
 
-* iTop version 2.0.2 (REST API 1.1) or higher
+* iTop version 2.6.1 (REST API 1.3) or higher
 * Powershell Core 6 or higher
 
 ## Usage
