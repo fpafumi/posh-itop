@@ -2344,15 +2344,17 @@ Function GenerateAndSendRequest {
 
     # Looks like we have at least one object to return, let's create a PSObject because it's easier to enum
     # We can also add the key and class type of the iTop object
-    foreach ($key in $result.objects.Keys) {
-        $thisObject = New-Object -Type PSObject -Property $result.objects.$key.fields
-        if($null -ne $result.objects.$key.key) {
+    # Modification par DERET Raphaël le 29/09/2019
+    # $result.objects.Keys par $result.objects.$($key.psobject.properties.name)
+    foreach ($key in $result.objects) {
+        $thisObject = $result.objects.$($key.psobject.properties.name).fields
+        if($null -ne $result.objects.$($key.psobject.properties.name).key) {
             # using the newer API, let's add the key
-            $thisObject | Add-Member Noteproperty -Name "key" -Value $result.objects.$key.key
+            $thisObject | Add-Member Noteproperty -Name "key" -Value $result.objects.$($key.psobject.properties.name).key
         }
-        if($null -ne $result.objects.$key.class) {
+        if($null -ne  $result.objects.$($key.psobject.properties.name).class) {
             # using the newer API, let's add the class
-            $thisObject | Add-Member Noteproperty -Name "class" -Value $result.objects.$key.class
+            $thisObject | Add-Member Noteproperty -Name "class" -Value $result.objects.$($key.psobject.properties.name).class
         }
         # put the object on the pipline
         $thisObject
