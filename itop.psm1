@@ -2308,7 +2308,7 @@ Function GenerateAndSendRequest {
     )
 
     $requestBody =  @{
-        version="1.1"
+        version="1.3"
         auth_user=$credentials.UserName
         auth_pwd=$credentials.GetNetworkCredential().Password
         json_data=ConvertTo-Json($requestHash) -Depth 10
