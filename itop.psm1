@@ -2346,18 +2346,22 @@ Function GenerateAndSendRequest {
     # We can also add the key and class type of the iTop object
     # Modification par DERET Raphaël le 29/09/2019
     # $result.objects.Keys par $result.objects.$($key.psobject.properties.name)
-    foreach ($key in $result.objects) {
-        $thisObject = $result.objects.$($key.psobject.properties.name).fields
-        if($null -ne $result.objects.$($key.psobject.properties.name).key) {
-            # using the newer API, let's add the key
-            $thisObject | Add-Member Noteproperty -Name "key" -Value $result.objects.$($key.psobject.properties.name).key
-        }
-        if($null -ne  $result.objects.$($key.psobject.properties.name).class) {
-            # using the newer API, let's add the class
-            $thisObject | Add-Member Noteproperty -Name "class" -Value $result.objects.$($key.psobject.properties.name).class
-        }
-        # put the object on the pipline
-        $thisObject
+    [System.Collections.ArrayList] $listThisObject = @()
+    if ($null -ne $result.objects) {
+        foreach($name in $result.objects.psobject.properties.name) {
+            $thisObject = $result.objects.$name.fields
+            if($null -ne $result.objects.$name.key) {
+                # using the newer API, let's add the key
+                $thisObject | Add-Member Noteproperty -Name "key" -Value $result.objects.$name.key
+            }
+            if($null -ne  $result.objects.$($key.psobject.properties.name).class) {
+                # using the newer API, let's add the class
+                $thisObject | Add-Member Noteproperty -Name "class" -Value $result.objects.$name.class
+            }
+            [void]$listThisObject.Add($thisObject)
+        }    
+        # put the object on the pipline    
+        $listThisObject
     }
 }
 
